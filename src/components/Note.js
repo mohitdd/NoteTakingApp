@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     marginTop: "5%",
+    marginBottom: "20px",
     "&.MuiExpansionPanelSummary-root.Mui-focused": {
       backgroundColor: "red",
     },
