@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { fetchNotes } from "../actions/notes";
+
+const mapStateToProps = (state) => ({
+  notes: state.notes,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchNotes: () => dispatch(fetchNotes),
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
     maxHeight: 500,
-    margin: "auto",
+    marginBottom: "10px",
   },
   divison: {
     columnGap: "0.5rem",
@@ -32,77 +43,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NotesCard(props) {
+function NotesCard({ fetchNotes, notes }) {
   const classes = useStyles();
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
 
   return (
     <div className={classes.divison}>
-      <Card className={classes.root} variant="outlined">
-        <CardActionArea>
-          <CardContent>
-            <Typography variant="h6">Mohit</Typography>
-            <Typography variant="body2" gutterBottom>
-              Mohit Dhingra
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-      <Card className={classes.root} variant="outlined">
-        <CardActionArea>
-          <CardContent>
-            <Typography variant="h6">Mohit</Typography>
-            <Typography variant="body2" gutterBottom>
-              The course is designed for students as well as working
-              professionals to prepare for coding interviews. This course is
-              going to have coding questions from school level to the level
-              needed for product based companies like Amazom, Microsoft, Adobe
-              etc.
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-      <Card className={classes.root} variant="outlined">
-        <CardActionArea>
-          <CardContent>
-            <Typography variant="h6">Mohit</Typography>
-            <Typography variant="body2" gutterBottom>
-              The course is designed for students as well as working
-              professionals to prepare for coding interviews. This course is
-              going to have coding questions from school level to the level
-              needed for product based companies like Amazom, Microsoft, Adobe
-              etc.
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>{" "}
-      <Card className={classes.root} variant="outlined">
-        <CardActionArea>
-          <CardContent>
-            <Typography variant="h6">Mohit</Typography>
-            <Typography variant="body2" gutterBottom>
-              The course is designed for students as well as working
-              professionals to prepare for coding interviews. This course is
-              going to have coding questions from school level to the level
-              needed for product based companies like Amazom, Microsoft, Adobe
-              etc.
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>{" "}
-      <Card className={classes.root} variant="outlined">
-        <CardActionArea>
-          <CardContent>
-            <Typography variant="h6">Mohit</Typography>
-            <Typography variant="body2" gutterBottom>
-              The course is designed for students as well as working
-              professionals to prepare for coding interviews. This course is
-              going to have coding questions from school level to the level
-              needed for product based companies like Amazom, Microsoft, Adobe
-              etc.
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
+      {notes.notes.map((note) => (
+        <Card className={classes.root} variant="outlined">
+          <CardActionArea>
+            <CardContent>
+              <Typography variant="h6">{note.title}</Typography>
+              <Typography variant="body2" gutterBottom>
+                {note.body}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      ))}
     </div>
   );
 }
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(NotesCard)
+);

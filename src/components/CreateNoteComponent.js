@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import { TextField, Button } from "@material-ui/core";
@@ -12,9 +12,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     marginTop: "5%",
     marginBottom: "20px",
-    "&.MuiExpansionPanelSummary-root.Mui-focused": {
-      backgroundColor: "red",
-    },
   },
   defaultProps: {
     padding: "10px",
@@ -36,7 +33,6 @@ export default function CreateNote(props) {
     setExpanded(!expanded);
   };
 
-  const theme = useTheme();
   const classes = useStyles();
   return (
     <Container>
@@ -49,9 +45,15 @@ export default function CreateNote(props) {
         <Grid item xs={12} md={6}>
           <Box borderRadius="3%" className={classes.defaultProps}>
             <TextField
+              fontWeight="600"
               fullWidth
-              label="Title..."
-              InputProps={{ disableUnderline: true }}
+              placeholder="Title..."
+              InputProps={{
+                disableUnderline: true,
+                classes: {
+                  input: classes.labelProps,
+                },
+              }}
               InputLabelProps={{
                 classes: {
                   formControl: classes.labelProps,
@@ -62,7 +64,7 @@ export default function CreateNote(props) {
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <TextField
                 fullWidth
-                label="Take a note..."
+                placeholder="Take a note..."
                 InputProps={{ disableUnderline: true }}
                 multiline
                 rowsMax={8}

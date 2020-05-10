@@ -1,9 +1,11 @@
 import React from "react";
-import CreateNote from "../src/components/Note";
+import CreateNote from "./components/CreateNoteComponent";
 import NotesCard from "../src/components/NoteCardComponent";
 import Container from "@material-ui/core/Container";
 import { createMuiTheme, ThemeProvider, CssBaseline } from "@material-ui/core";
-import "./App.css";
+import { ConfigureStore } from "./store";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
 
 const theme = createMuiTheme({
   palette: {
@@ -12,14 +14,19 @@ const theme = createMuiTheme({
 });
 
 function App() {
+  const store = ConfigureStore();
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <CreateNote></CreateNote>
-      <Container>
-        <NotesCard></NotesCard>
-      </Container>
-    </ThemeProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <CreateNote></CreateNote>
+          <Container>
+            <NotesCard></NotesCard>
+          </Container>
+        </ThemeProvider>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
