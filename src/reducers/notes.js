@@ -28,6 +28,13 @@ export const notes = (state = initialState, action) => {
         ...state,
         loading: true,
       };
+    case ActionTypes.ADD_NOTE:
+      return {
+        ...state,
+        loading: false,
+        error: {},
+        notes: state.notes.concat(payload),
+      };
     default:
       return state;
   }

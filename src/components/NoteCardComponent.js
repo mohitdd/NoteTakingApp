@@ -53,7 +53,7 @@ function NotesCard({ fetchNotes, notes }) {
   return (
     <div className={classes.divison}>
       {notes.notes.map((note) => (
-        <Card className={classes.root} variant="outlined">
+        <Card key={note.noteId} className={classes.root} variant="outlined">
           <CardActionArea>
             <CardContent>
               <Typography variant="h6">{note.title}</Typography>

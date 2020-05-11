@@ -1,11 +1,17 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import { TextField, Button } from "@material-ui/core";
-
 import Collapse from "@material-ui/core/Collapse";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { createNote } from "../actions/notes";
+
+const mapDispatchToProps = (dispatch) => ({
+  createNote: (note) => dispatch(createNote(note)),
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,8 +33,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CreateNote(props) {
+function CreateNote(props) {
   const [expanded, setExpanded] = React.useState(false);
+  const [noteData, setNoteData] = React.useState({
+    title: "",
+    body: "",
+    userId: "tsameerc@gmail.com",
+  });
+
+  const setTitle = (e) => {
+    let value = e.target.value;
+
+    setNoteData((prevVal) => ({
+      ...prevVal,
+      title: value,
+    }));
+  };
+
+  const setBody = (e) => {
+    let value = e.target.value;
+
+    setNoteData((prevVal) => ({
+      ...prevVal,
+      body: value,
+    }));
+  };
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -45,6 +75,8 @@ export default function CreateNote(props) {
         <Grid item xs={12} md={6}>
           <Box borderRadius="3%" className={classes.defaultProps}>
             <TextField
+              value={noteData.title}
+              onChange={setTitle}
               fontWeight="600"
               fullWidth
               placeholder="Title..."
@@ -63,6 +95,8 @@ export default function CreateNote(props) {
             ></TextField>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <TextField
+                value={noteData.body}
+                onChange={setBody}
                 fullWidth
                 placeholder="Take a note..."
                 InputProps={{ disableUnderline: true }}
@@ -75,7 +109,20 @@ export default function CreateNote(props) {
                 }}
               ></TextField>
               <Grid item container justify="flex-end">
-                <Button color="primary" variant="outlined" size="small">
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  size="small"
+                  onClick={async () => {
+                    await props.createNote(noteData);
+                    setNoteData((prevVal) => ({
+                      ...prevVal,
+                      title: "",
+                      body: "",
+                    }));
+                    handleExpandClick();
+                  }}
+                >
                   Close
                 </Button>
               </Grid>
@@ -86,3 +133,5 @@ export default function CreateNote(props) {
     </Container>
   );
 }
+
+export default withRouter(connect(null, mapDispatchToProps)(CreateNote));

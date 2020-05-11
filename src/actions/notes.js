@@ -25,3 +25,21 @@ export const fetchNotes = async (dispatch) => {
     });
   }
 };
+
+export const createNote = (body) => async (dispatch) => {
+  try {
+    const response = await axios.post(notesURL, body, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.statusText === "OK") {
+      dispatch({
+        type: ActionTypes.ADD_NOTE,
+        payload: response.data,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
