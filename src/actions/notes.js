@@ -33,7 +33,9 @@ export const createNote = (body) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     });
-    if (response.statusText === "OK") {
+
+    if (response.statusText === "Created") {
+      console.log(response.data);
       dispatch({
         type: ActionTypes.ADD_NOTE,
         payload: response.data,

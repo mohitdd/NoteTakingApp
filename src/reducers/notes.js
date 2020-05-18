@@ -33,7 +33,7 @@ export const notes = (state = initialState, action) => {
         ...state,
         loading: false,
         error: {},
-        notes: state.notes.concat(payload),
+        notes: [payload].concat(state.notes),
       };
     default:
       return state;
