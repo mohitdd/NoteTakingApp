@@ -7,6 +7,9 @@ import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { fetchNotes } from "../actions/notes";
+import { CardActions, Zoom } from "@material-ui/core";
+import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
+import Grow from "@material-ui/core/Grow";
 
 const mapStateToProps = (state) => ({
   notes: state.notes,
@@ -41,26 +44,50 @@ const useStyles = makeStyles((theme) => ({
       columnCount: 4,
     },
   },
+  iconAction: {
+    visibility: "hidden",
+  },
+  icon: {
+    "&:hover $iconAction": {
+      visibility: "inherit",
+    },
+  },
 }));
 
 function NotesCard({ fetchNotes, notes }) {
   const classes = useStyles();
+  const [checked, setChecked] = React.useState(false);
 
   useEffect(() => {
     fetchNotes();
   }, []);
 
+  const displayAnimation = () => {
+    console.log(checked);
+    setChecked(!checked);
+  };
+
   return (
     <div className={classes.divison}>
       {notes.notes.map((note) => (
         <Card key={note.noteId} className={classes.root} variant="outlined">
-          <CardActionArea>
+          <CardActionArea
+            className={classes.icon}
+            onMouseOver={() => displayAnimation()}
+            onMouseOut={() => displayAnimation()}
+          >
             <CardContent>
               <Typography variant="h6">{note.title}</Typography>
               <Typography variant="body2" gutterBottom>
                 {note.body}
               </Typography>
             </CardContent>
+            <CardActions className={classes.iconAction}>
+              <DeleteOutlinedIcon
+                disableSpacing
+                fontSize="small"
+              ></DeleteOutlinedIcon>
+            </CardActions>
           </CardActionArea>
         </Card>
       ))}
