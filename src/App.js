@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 
 const theme = createMuiTheme({
   palette: {
-    type: "dark",
+    type: "light",
   },
 });
 

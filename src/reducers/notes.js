@@ -17,6 +17,18 @@ export const notes = (state = initialState, action) => {
         loading: false,
       };
 
+    case ActionTypes.DELETE_NOTE:
+      var dummy = Object.assign({}, state);
+      dummy = dummy.notes.filter((item) => {
+        if (item.noteId !== payload) return item;
+      });
+      return {
+        ...state,
+        loading: false,
+        error: {},
+        notes: dummy,
+      };
+
     case ActionTypes.NOTES_FAILED:
       return {
         ...state,

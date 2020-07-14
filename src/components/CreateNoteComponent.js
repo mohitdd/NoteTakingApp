@@ -115,7 +115,7 @@ function CreateNote(props) {
                   size="small"
                   onClick={async () => {
                     await props.createNote(noteData);
-                    console.log("Note is created");
+
                     setNoteData((prevVal) => ({
                       ...prevVal,
                       title: "",

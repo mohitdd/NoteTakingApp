@@ -33,13 +33,36 @@ export const createNote = (body) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
+
     if (response.statusText === "Created") {
-      console.log(response.data);
       dispatch({
         type: ActionTypes.ADD_NOTE,
         payload: response.data,
       });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const deleteNote = (noteId) => async (dispatch) => {
+  try {
+    const response = await axios.delete(notesURL, {
+      params: {
+        userId: "tsameerc@gmail.com",
+        noteId: noteId,
+      },
+    });
+    dispatch({
+      type: ActionTypes.NOTES_LOADING,
+    });
+    if (response.statusText === "OK") {
+      setTimeout(() => {
+        dispatch({
+          type: ActionTypes.DELETE_NOTE,
+          payload: noteId,
+        });
+      }, 2000);
     }
   } catch (err) {
     console.log(err);

@@ -6,10 +6,10 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { fetchNotes } from "../actions/notes";
-import { CardActions, Zoom } from "@material-ui/core";
+import { fetchNotes, deleteNote } from "../actions/notes";
+import { CardActions } from "@material-ui/core";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
-import Grow from "@material-ui/core/Grow";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const mapStateToProps = (state) => ({
   notes: state.notes,
@@ -17,6 +17,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchNotes: () => dispatch(fetchNotes),
+  deleteNote: (noteId) => dispatch(deleteNote(noteId)),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +27,11 @@ const useStyles = makeStyles((theme) => ({
     },
     maxHeight: 500,
     marginBottom: "10px",
+  },
+  loading: {
+    position: "absolute",
+    left: "49%",
+    top: "50%",
   },
   divison: {
     columnGap: "0.5rem",
@@ -54,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NotesCard({ fetchNotes, notes }) {
+function NotesCard({ fetchNotes, deleteNote, notes }) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState(false);
 
@@ -63,12 +69,19 @@ function NotesCard({ fetchNotes, notes }) {
   }, []);
 
   const displayAnimation = () => {
-    console.log(checked);
     setChecked(!checked);
   };
 
   return (
     <div className={classes.divison}>
+      {notes.loading ? (
+        <CircularProgress
+          className={classes.loading}
+          color="secondary"
+        ></CircularProgress>
+      ) : (
+        console.log("Hello")
+      )}
       {notes.notes.map((note) => (
         <Card key={note.noteId} className={classes.root} variant="outlined">
           <CardActionArea
@@ -86,6 +99,7 @@ function NotesCard({ fetchNotes, notes }) {
               <DeleteOutlinedIcon
                 disableSpacing
                 fontSize="small"
+                onClick={async () => await deleteNote(note.noteId)}
               ></DeleteOutlinedIcon>
             </CardActions>
           </CardActionArea>
